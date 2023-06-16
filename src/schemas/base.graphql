@@ -1,0 +1,81 @@
+scalar Timestamp
+
+enum QueryOp {
+  EQ
+  NEQ
+  GT
+  GTE
+  LT
+  LTE
+  IN
+  NIN
+  ARRAY_CONTAINS
+  ARRAY_CONTAINS_ANY
+}
+
+input QueryInputElement {
+  field: String!
+  op: QueryOp!
+  int: Int
+  float: Float
+  boolean: Boolean
+  string: String
+  date: String
+}
+
+input QueryInput {
+  queries: [QueryInputElement]
+}
+
+interface MutationResponse {
+  "Similar to HTTP status code, represents the status of the mutation"
+  code: Int!
+  "Indicates whether the mutation was successful"
+  success: Boolean!
+  "Human-readable message for the UI"
+  message: String!
+}
+
+"""
+ModelType use by bsc-firstore-orm
+"""
+interface ModelType {
+  id: ID
+  _parentPath: String
+}
+
+"""
+Response after deleting a Model
+"""
+type DeleteResponse implements MutationResponse {
+  "Similar to HTTP status code, represents the status of the mutation"
+  code: Int!
+  "Indicates whether the mutation was successful"
+  success: Boolean!
+  "Human-readable message for the UI"
+  message: String!
+  "The ID of the deleted Model"
+  id: ID
+}
+
+"""
+Response after creating a Model
+"""
+type CreateMutationResponse implements MutationResponse {
+  "Similar to HTTP status code, represents the status of the mutation"
+  code: Int!
+  "Indicates whether the mutation was successful"
+  success: Boolean!
+  "Human-readable message for the UI"
+  message: String!
+  "Id of The newly created record"
+  id: ID
+}
+
+type QueryResponse {
+  text: String
+}
+
+type Query {
+  ping(name: String!): QueryResponse!
+}
