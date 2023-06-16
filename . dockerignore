@@ -1,0 +1,5 @@
+.pnpm-store
+.vscode
+.envrc
+dist
+node_modules
