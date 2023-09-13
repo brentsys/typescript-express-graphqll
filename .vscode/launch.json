@@ -33,11 +33,24 @@
     },{
       "name": "Apollo",
       "request": "launch",
-      "command": "DEBUG=* pnpm start",
+      "command": "pnpm start",
       "type": "node-terminal",
       "env": {
-          "PORT": "4080"
+          "PORT": "4081",
+          "DEBUG": "krApp:*"
       },      
+    },{
+      "name": "InEmulator",
+      "request": "launch",
+      "command": "pnpm start",
+      "type": "node-terminal",
+      "env": {
+          "PORT": "4081",
+          "DEBUG": "krApp:*",
+          "FIRESTORE_EMULATOR_HOST": "en0:8090",
+          "FIREBASE_AUTH_EMULATOR_HOST": "en0:9099",
+          "FIREBASE_STORAGE_EMULATOR_HOST": "en0:9199"
+      }, 
     }
   ]
 }

@@ -11,6 +11,7 @@ import resolvers from './resolvers'
 import path from 'path'
 import {loadFilesSync} from '@graphql-tools/load-files'
 import {mergeTypeDefs} from '@graphql-tools/merge'
+import './firebase'
 
 interface MyContext {
   token?: string;
@@ -48,7 +49,7 @@ async function startApolloServer() {
     cors<cors.CorsRequest>(),
     json(),
     expressMiddleware(server, {
-      context: async ({req}) => ({token: req.headers.token}),
+      context: async ({req}) => ({headers: req.headers})
     }),
   );
 

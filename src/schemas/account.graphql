@@ -1,0 +1,7 @@
+interface Account {
+	code: String!
+	mcId: String!
+	name: String!
+	status: Int!
+	partnerId: String!
+}

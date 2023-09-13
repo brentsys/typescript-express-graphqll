@@ -9,12 +9,27 @@ export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' |
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string | number; output: string; }
+  ID: { input: string; output: string; }
   String: { input: string; output: string; }
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   Timestamp: { input: any; output: any; }
+};
+
+export type Account = {
+  code: Scalars['String']['output'];
+  mcId: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  partnerId: Scalars['String']['output'];
+  status: Scalars['Int']['output'];
+};
+
+export type CheckoutReference = {
+  _parentPath?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  partnerId: Scalars['String']['output'];
+  status: Scalars['Int']['output'];
 };
 
 /** Response after creating a Model */
@@ -43,10 +58,47 @@ export type DeleteResponse = MutationResponse & {
   success: Scalars['Boolean']['output'];
 };
 
+export type KashRequest = {
+  _parentPath?: Maybe<Scalars['String']['output']>;
+  completed: Scalars['Boolean']['output'];
+  data: RequestData;
+  emitId: Scalars['String']['output'];
+  fields: Array<Maybe<Scalars['String']['output']>>;
+  id?: Maybe<Scalars['ID']['output']>;
+  message?: Maybe<Scalars['String']['output']>;
+  result?: Maybe<Scalars['Boolean']['output']>;
+  secured: Scalars['Boolean']['output'];
+  type?: Maybe<Scalars['String']['output']>;
+  userId: Scalars['String']['output'];
+  version: Scalars['String']['output'];
+};
+
+export type KashRequestMutationResponse = MutationResponse & {
+  __typename?: 'KashRequestMutationResponse';
+  /** Similar to HTTP status code, represents the status of the mutation */
+  code: Scalars['Int']['output'];
+  /** KashRequest Id after creation */
+  id?: Maybe<Scalars['String']['output']>;
+  /** Human-readable message for the UI */
+  message: Scalars['String']['output'];
+  /** Indicates whether the mutation was successful */
+  success: Scalars['Boolean']['output'];
+};
+
 /** ModelType use by bsc-firstore-orm */
 export type ModelType = {
   _parentPath?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['ID']['output']>;
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  createRequest: KashRequestMutationResponse;
+};
+
+
+export type MutationCreateRequestArgs = {
+  params: RequestInput;
 };
 
 export type MutationResponse = {
@@ -98,6 +150,23 @@ export enum QueryOp {
 export type QueryResponse = {
   __typename?: 'QueryResponse';
   text?: Maybe<Scalars['String']['output']>;
+};
+
+export type RequestData = {
+  amount: Scalars['Float']['output'];
+  category: Scalars['Int']['output'];
+  creditId: Scalars['String']['output'];
+  creditName: Scalars['String']['output'];
+  currencyCode: Scalars['String']['output'];
+  info: Scalars['String']['output'];
+  mcId: Scalars['String']['output'];
+  transactionId: Scalars['ID']['output'];
+};
+
+export type RequestInput = {
+  accountId: Scalars['String']['input'];
+  amount: Scalars['Float']['input'];
+  transactionId: Scalars['ID']['input'];
 };
 
 
@@ -170,45 +239,80 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping of interface types */
 export type ResolversInterfaceTypes<RefType extends Record<string, unknown>> = {
+  Account: never;
+  CheckoutReference: never;
+  KashRequest: never;
   ModelType: never;
-  MutationResponse: ( CreateMutationResponse ) | ( DeleteResponse );
+  MutationResponse: ( CreateMutationResponse ) | ( DeleteResponse ) | ( KashRequestMutationResponse );
+  RequestData: never;
 };
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  Account: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['Account']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  CheckoutReference: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['CheckoutReference']>;
   CreateMutationResponse: ResolverTypeWrapper<CreateMutationResponse>;
   DeleteResponse: ResolverTypeWrapper<DeleteResponse>;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  KashRequest: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['KashRequest']>;
+  KashRequestMutationResponse: ResolverTypeWrapper<KashRequestMutationResponse>;
   ModelType: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['ModelType']>;
+  Mutation: ResolverTypeWrapper<{}>;
   MutationResponse: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['MutationResponse']>;
   Query: ResolverTypeWrapper<{}>;
   QueryInput: QueryInput;
   QueryInputElement: QueryInputElement;
   QueryOp: QueryOp;
   QueryResponse: ResolverTypeWrapper<QueryResponse>;
+  RequestData: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['RequestData']>;
+  RequestInput: RequestInput;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Timestamp: ResolverTypeWrapper<Scalars['Timestamp']['output']>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  Account: ResolversInterfaceTypes<ResolversParentTypes>['Account'];
   Boolean: Scalars['Boolean']['output'];
+  CheckoutReference: ResolversInterfaceTypes<ResolversParentTypes>['CheckoutReference'];
   CreateMutationResponse: CreateMutationResponse;
   DeleteResponse: DeleteResponse;
   Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
+  KashRequest: ResolversInterfaceTypes<ResolversParentTypes>['KashRequest'];
+  KashRequestMutationResponse: KashRequestMutationResponse;
   ModelType: ResolversInterfaceTypes<ResolversParentTypes>['ModelType'];
+  Mutation: {};
   MutationResponse: ResolversInterfaceTypes<ResolversParentTypes>['MutationResponse'];
   Query: {};
   QueryInput: QueryInput;
   QueryInputElement: QueryInputElement;
   QueryResponse: QueryResponse;
+  RequestData: ResolversInterfaceTypes<ResolversParentTypes>['RequestData'];
+  RequestInput: RequestInput;
   String: Scalars['String']['output'];
   Timestamp: Scalars['Timestamp']['output'];
+};
+
+export type AccountResolvers<ContextType = any, ParentType extends ResolversParentTypes['Account'] = ResolversParentTypes['Account']> = {
+  __resolveType: TypeResolveFn<null, ParentType, ContextType>;
+  code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  mcId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  partnerId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+};
+
+export type CheckoutReferenceResolvers<ContextType = any, ParentType extends ResolversParentTypes['CheckoutReference'] = ResolversParentTypes['CheckoutReference']> = {
+  __resolveType: TypeResolveFn<null, ParentType, ContextType>;
+  _parentPath?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  partnerId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
 };
 
 export type CreateMutationResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateMutationResponse'] = ResolversParentTypes['CreateMutationResponse']> = {
@@ -227,14 +331,42 @@ export type DeleteResponseResolvers<ContextType = any, ParentType extends Resolv
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type KashRequestResolvers<ContextType = any, ParentType extends ResolversParentTypes['KashRequest'] = ResolversParentTypes['KashRequest']> = {
+  __resolveType: TypeResolveFn<null, ParentType, ContextType>;
+  _parentPath?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  completed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  data?: Resolver<ResolversTypes['RequestData'], ParentType, ContextType>;
+  emitId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  fields?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  result?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  secured?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  version?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+};
+
+export type KashRequestMutationResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['KashRequestMutationResponse'] = ResolversParentTypes['KashRequestMutationResponse']> = {
+  code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type ModelTypeResolvers<ContextType = any, ParentType extends ResolversParentTypes['ModelType'] = ResolversParentTypes['ModelType']> = {
   __resolveType: TypeResolveFn<null, ParentType, ContextType>;
   _parentPath?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
 };
 
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createRequest?: Resolver<ResolversTypes['KashRequestMutationResponse'], ParentType, ContextType, RequireFields<MutationCreateRequestArgs, 'params'>>;
+};
+
 export type MutationResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['MutationResponse'] = ResolversParentTypes['MutationResponse']> = {
-  __resolveType: TypeResolveFn<'CreateMutationResponse' | 'DeleteResponse', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'CreateMutationResponse' | 'DeleteResponse' | 'KashRequestMutationResponse', ParentType, ContextType>;
   code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -249,17 +381,35 @@ export type QueryResponseResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type RequestDataResolvers<ContextType = any, ParentType extends ResolversParentTypes['RequestData'] = ResolversParentTypes['RequestData']> = {
+  __resolveType: TypeResolveFn<null, ParentType, ContextType>;
+  amount?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  category?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  creditId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  creditName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  currencyCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  info?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  mcId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  transactionId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+};
+
 export interface TimestampScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Timestamp'], any> {
   name: 'Timestamp';
 }
 
 export type Resolvers<ContextType = any> = {
+  Account?: AccountResolvers<ContextType>;
+  CheckoutReference?: CheckoutReferenceResolvers<ContextType>;
   CreateMutationResponse?: CreateMutationResponseResolvers<ContextType>;
   DeleteResponse?: DeleteResponseResolvers<ContextType>;
+  KashRequest?: KashRequestResolvers<ContextType>;
+  KashRequestMutationResponse?: KashRequestMutationResponseResolvers<ContextType>;
   ModelType?: ModelTypeResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   MutationResponse?: MutationResponseResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   QueryResponse?: QueryResponseResolvers<ContextType>;
+  RequestData?: RequestDataResolvers<ContextType>;
   Timestamp?: GraphQLScalarType;
 };
 

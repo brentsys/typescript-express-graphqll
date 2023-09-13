@@ -1,0 +1,44 @@
+interface RequestData {
+	amount: Float!
+	category: Int!
+	creditId: String!
+	creditName: String!
+	transactionId: ID!
+	currencyCode: String!
+	info: String!
+	mcId: String!
+}
+interface KashRequest implements ModelType {
+	id: ID
+	_parentPath: String
+	completed: Boolean!
+	data: RequestData!
+	emitId: String!
+	fields: [String]!
+	message: String
+	result: Boolean
+	secured: Boolean!
+	type: String
+	userId: String!
+	version: String!
+}
+input RequestInput {
+	amount: Float!
+	accountId: String!
+	transactionId: ID!
+}
+
+type KashRequestMutationResponse implements MutationResponse {
+	"Similar to HTTP status code, represents the status of the mutation"
+	code: Int!
+	"Indicates whether the mutation was successful"
+	success: Boolean!
+	"Human-readable message for the UI"
+	message: String!
+	"KashRequest Id after creation"
+	id: String
+}
+
+type Mutation {
+	createRequest(params: RequestInput!): KashRequestMutationResponse!
+}

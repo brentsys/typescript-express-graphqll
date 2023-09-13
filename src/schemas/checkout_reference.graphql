@@ -1,0 +1,6 @@
+interface CheckoutReference implements ModelType {
+	id: ID!
+	partnerId: String!
+	status: Int!
+	_parentPath: String
+}
