@@ -1,5 +1,5 @@
 {
-  "name": "swing-messenger",
+  "name": "kash-request-server",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,7 +8,10 @@
     "generate": "graphql-codegen",
     "build": "rimraf dist && swc ./src -d dist && pnpm copy-files",
     "start:docker": "pnpm build && node --inspect=0.0.0.0 dist/index.js",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "build:image": "gcloud builds submit --tag gcr.io/${GOOGLE_CLOUD_PROJECT}/kash-request-server:1.0.0",
+    "gcloud:deploy": "gcloud run deploy --image=gcr.io/${GOOGLE_CLOUD_PROJECT}/kash-request-server:1.0.0 --platform managed",
+    "full:deploy": "pnpm build:image && pnpm gcloud:deploy"
   },
   "keywords": [],
   "author": "",

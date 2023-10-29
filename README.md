@@ -9,4 +9,5 @@ This project implements a boiler plate code for a Express server with Typescript
 ## Acknowledgements
 
 This project is mostly inspired by [Kevin Wade's post: - The Ultimate Node/Docker Setup](https://kevinwwwade.medium.com/the-ultimate-node-docker-setup-step-by-step-2023-update-4fd9dd8be48b).
-Many thanks to its authors for his work and inspiration.  ([utlimate-node-stack Github repo here](https://github.com/mrwade/ultimate-node-stack)).
+Many thanks to its authors for his work and inspiration.  ([utlimate-node-stack Github repo here](https://github.com/mrwade/ultimate-node-stack))
+See ([https://codelabs.developers.google.com/codelabs/cloud-run-deploy#4](https://codelabs.developers.google.com/codelabs/cloud-run-deploy#4)) for gcloud deployment

@@ -7,6 +7,7 @@ interface RequestData {
 	currencyCode: String!
 	info: String!
 	mcId: String!
+	partnerId: String
 }
 interface KashRequest implements ModelType {
 	id: ID
@@ -21,11 +22,15 @@ interface KashRequest implements ModelType {
 	type: String
 	userId: String!
 	version: String!
+	callbackUrl: String
+	noCancel: Boolean
 }
 input RequestInput {
 	amount: Float!
-	accountId: String!
+	currency: String!
 	transactionId: ID!
+	callbackUrl: String
+	noCancel: Boolean
 }
 
 type KashRequestMutationResponse implements MutationResponse {

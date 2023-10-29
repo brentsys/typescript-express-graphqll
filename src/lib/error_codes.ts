@@ -5,15 +5,16 @@ export type ErrorCode = {
   message: string
 }
 
-const InvalidOrigin: ErrorCode = {code: 7001, message: "Invalid Origin header"}
-const UnregisteredOriginUrl: ErrorCode = {code: 7002, message: "Unauthorized origin URL"}
+const NoAPIKey: ErrorCode = {code: 7001, message: "Invalid No API key"}
+const InvalidAPIKey: ErrorCode = {code: 7011, message: "Invalid API Key"}
 const AccountIdError: ErrorCode = {code: 7010, message: "Invalid accountId"}
-const InvalidOriginUrl: ErrorCode = {code: 7011, message: "Invalid origin Url for this account"}
+const UnexpectedError: ErrorCode = {code: 7099, message: "Unexpected error"}
 
 export default {
-  InvalidOrigin,
-  UnregisteredOriginUrl,
-  InvalidOriginUrl, AccountIdError
+  NoAPIKey,
+  InvalidAPIKey,
+  AccountIdError,
+  UnexpectedError
 }
 
 

@@ -6,7 +6,7 @@ export const baseLog = (file: string) => debug([BaseLog, file].join(':'))
 
 export const ModelType = {
   account: "accounts",
-  authorizedUrl: "checkout_urls",
+  apiKey: "checkout_api",
   kashRequest: "kash_requests",
   partner: "partners"
 }

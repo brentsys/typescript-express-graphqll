@@ -1,0 +1,6 @@
+interface CheckoutApi implements ModelType {
+	id: ID!
+	accountId: String!
+	partnerId: String!
+	_parentPath: String
+}
