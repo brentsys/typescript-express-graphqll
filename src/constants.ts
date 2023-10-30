@@ -28,6 +28,7 @@ export const kashRequestTemplate: KashRequest = {
   emitId: "emitId",
   fields: ["accountId", "accountName"],
   secured: false,
+  type: 'xfer',
   userId: "public",
   version: "v0.0"
 }
