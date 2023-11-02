@@ -8,13 +8,17 @@ export type ErrorCode = {
 const NoAPIKey: ErrorCode = {code: 7001, message: "Invalid No API key"}
 const InvalidAPIKey: ErrorCode = {code: 7011, message: "Invalid API Key"}
 const AccountIdError: ErrorCode = {code: 7010, message: "Invalid accountId"}
+const NoJwtToken: ErrorCode = {code: 7090, message: "Invalid Authorization header"}
+const InvalidJWTToken: ErrorCode = {code: 7091, message: "Invalid JWT token"}
 const UnexpectedError: ErrorCode = {code: 7099, message: "Unexpected error"}
 
 export default {
   NoAPIKey,
   InvalidAPIKey,
   AccountIdError,
-  UnexpectedError
+  UnexpectedError,
+  NoJwtToken,
+  InvalidJWTToken
 }
 
 

@@ -52,6 +52,13 @@ export type CreateMutationResponse = MutationResponse & {
   success: Scalars['Boolean']['output'];
 };
 
+export type DashInput = {
+  amount: Scalars['Float']['input'];
+  apiKeyId: Scalars['String']['input'];
+  currency: Scalars['String']['input'];
+  info: Scalars['String']['input'];
+};
+
 /** Response after deleting a Model */
 export type DeleteResponse = MutationResponse & {
   __typename?: 'DeleteResponse';
@@ -73,6 +80,7 @@ export type KashRequest = {
   emitId: Scalars['String']['output'];
   fields: Array<Maybe<Scalars['String']['output']>>;
   id?: Maybe<Scalars['ID']['output']>;
+  info?: Maybe<Scalars['String']['output']>;
   message?: Maybe<Scalars['String']['output']>;
   noCancel?: Maybe<Scalars['Boolean']['output']>;
   result?: Maybe<Scalars['Boolean']['output']>;
@@ -102,7 +110,13 @@ export type ModelType = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createDashRequest: KashRequestMutationResponse;
   createRequest: KashRequestMutationResponse;
+};
+
+
+export type MutationCreateDashRequestArgs = {
+  params: DashInput;
 };
 
 
@@ -170,13 +184,14 @@ export type RequestData = {
   info: Scalars['String']['output'];
   mcId: Scalars['String']['output'];
   partnerId?: Maybe<Scalars['String']['output']>;
-  transactionId: Scalars['ID']['output'];
+  transactionId?: Maybe<Scalars['ID']['output']>;
 };
 
 export type RequestInput = {
   amount: Scalars['Float']['input'];
   callbackUrl?: InputMaybe<Scalars['String']['input']>;
   currency: Scalars['String']['input'];
+  info?: InputMaybe<Scalars['String']['input']>;
   noCancel?: InputMaybe<Scalars['Boolean']['input']>;
   transactionId: Scalars['ID']['input'];
 };
@@ -267,6 +282,7 @@ export type ResolversTypes = {
   CheckoutApi: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['CheckoutApi']>;
   CheckoutReference: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['CheckoutReference']>;
   CreateMutationResponse: ResolverTypeWrapper<CreateMutationResponse>;
+  DashInput: DashInput;
   DeleteResponse: ResolverTypeWrapper<DeleteResponse>;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
@@ -294,6 +310,7 @@ export type ResolversParentTypes = {
   CheckoutApi: ResolversInterfaceTypes<ResolversParentTypes>['CheckoutApi'];
   CheckoutReference: ResolversInterfaceTypes<ResolversParentTypes>['CheckoutReference'];
   CreateMutationResponse: CreateMutationResponse;
+  DashInput: DashInput;
   DeleteResponse: DeleteResponse;
   Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
@@ -363,6 +380,7 @@ export type KashRequestResolvers<ContextType = any, ParentType extends Resolvers
   emitId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   fields?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  info?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   noCancel?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   result?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
@@ -387,6 +405,7 @@ export type ModelTypeResolvers<ContextType = any, ParentType extends ResolversPa
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createDashRequest?: Resolver<ResolversTypes['KashRequestMutationResponse'], ParentType, ContextType, RequireFields<MutationCreateDashRequestArgs, 'params'>>;
   createRequest?: Resolver<ResolversTypes['KashRequestMutationResponse'], ParentType, ContextType, RequireFields<MutationCreateRequestArgs, 'params'>>;
 };
 
@@ -416,7 +435,7 @@ export type RequestDataResolvers<ContextType = any, ParentType extends Resolvers
   info?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   mcId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   partnerId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  transactionId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  transactionId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
 };
 
 export interface TimestampScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Timestamp'], any> {

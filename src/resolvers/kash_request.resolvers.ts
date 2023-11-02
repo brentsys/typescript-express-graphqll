@@ -1,8 +1,8 @@
 import {Account, KashRequest, Resolvers} from '../types'
-import {makeResponse, rejectResponse} from '../lib/resolver_tools'
+import {makeResponse, manageError} from '../lib/resolver_tools'
 import {ModelType, baseLog, kashRequestTemplate} from '../constants'
 import {getFirestore} from 'firebase-admin/firestore'
-import {validateRequest} from '../lib/authentication'
+import {validateDashRequest, validateRequest} from '../lib/authentication'
 import Codes, {AppError} from '../lib/error_codes'
 
 const dLog = baseLog('resolver.kashRequest')
@@ -34,6 +34,7 @@ const resolvers: Resolvers = {
         dLog({account})
         const kr = kashRequestTemplate
         if (params.noCancel) kr.noCancel = params.noCancel
+        if (params.info) kr.info = params.info
         kr.data.amount = params.amount
         kr.data.creditId = account.code
         kr.data.creditName = account.name
@@ -47,11 +48,29 @@ const resolvers: Resolvers = {
         const result = Promise.resolve({id})
         return makeResponse(result, (resp) => ({id: resp.id}))
       } catch (error) {
-        if (error instanceof AppError) return rejectResponse(error)
-        const err = new AppError(Codes.UnexpectedError)
-        const msg: string = (error as Error).message
-        if (msg) err.message = msg
-        return rejectResponse(err)
+        return manageError(error)
+      }
+    },
+    createDashRequest: async (_, {params}, req) => {
+      try {
+        const {apiKeyId, info, amount, currency} = params
+        const apiKey = await validateDashRequest(req, apiKeyId)
+        const {accountId} = apiKey
+        const account = await getAccount(accountId)
+        const kr = {...kashRequestTemplate, noCancel: true}
+        kr.data.amount = amount
+        kr.data.info = info
+        kr.data.creditId = account.code
+        kr.data.creditName = account.name
+        kr.data.currencyCode = currency
+        kr.data.mcId = account.mcId
+        kr.emitId = apiKey.id
+        kr.data.partnerId = apiKey.partnerId
+        const id = await saveRequest(kr)
+        const result = Promise.resolve({id})
+        return makeResponse(result, (resp) => ({id: resp.id}))
+      } catch (error) {
+        return manageError(error)
       }
     }
   }

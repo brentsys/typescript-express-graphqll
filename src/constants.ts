@@ -23,7 +23,6 @@ export const kashRequestTemplate: KashRequest = {
     currencyCode: "XAF",
     info: "info",
     mcId: "mcId",
-    transactionId: ""
   },
   emitId: "emitId",
   fields: ["accountId", "accountName"],

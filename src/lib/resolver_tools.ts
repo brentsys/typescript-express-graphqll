@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {MutationResponse} from "../types"
-import {AppError, ErrorCode} from "./error_codes"
+import Codes, {AppError, ErrorCode} from "./error_codes"
 
 export async function rejectResponse(code: ErrorCode): Promise<MutationResponse> {
   const promise = AppError.reject(code)
@@ -26,4 +26,12 @@ export async function makeResponse<T>(promise: Promise<T>, fn?: (resp: T) => any
     }
     return errResponse
   }
+}
+
+export function manageError(error: any) {
+  if (error instanceof AppError) return rejectResponse(error)
+  const err = new AppError(Codes.UnexpectedError)
+  const msg: string = (error as Error).message
+  if (msg) err.message = msg
+  return rejectResponse(err)
 }
