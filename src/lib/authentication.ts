@@ -41,7 +41,7 @@ export async function validateDashRequest(req: Request, apiKeyId: string): Promi
   if (!token) throw new AppError(Codes.NoJwtToken)
   const jwt = decode(token)
   if (typeof jwt !== 'object') throw new AppError(Codes.InvalidJWTToken)
-  const partnerId: string = _.get(jwt, "claims.partnerId")
+  const partnerId: string = _.get(jwt, "partnerId")
   console.log({jwt, partnerId})
   if (!partnerId) throw new AppError(Codes.InvalidJWTToken)
   const parentPath = [ModelType.partner, partnerId].join('/')
