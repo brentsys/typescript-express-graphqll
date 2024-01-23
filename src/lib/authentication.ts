@@ -35,14 +35,20 @@ export async function validateRequest(req: Request): Promise<CheckoutApi> {
   return doc.data()
 }
 
-
-export async function validateDashRequest(req: Request, apiKeyId: string): Promise<CheckoutApi> {
+export async function getPartnerIdFromToken(req: Request): Promise<string> {
   const token = getToken(req)
   if (!token) throw new AppError(Codes.NoJwtToken)
   const jwt = decode(token)
   if (typeof jwt !== 'object') throw new AppError(Codes.InvalidJWTToken)
   const partnerId: string = _.get(jwt, "partnerId")
   console.log({jwt, partnerId})
+  if (!partnerId) throw new AppError(Codes.InvalidJWTToken)
+  return partnerId
+}
+
+
+export async function validateDashRequest(req: Request, apiKeyId: string): Promise<CheckoutApi> {
+  const partnerId = await getPartnerIdFromToken(req)
   if (!partnerId) throw new AppError(Codes.InvalidJWTToken)
   const parentPath = [ModelType.partner, partnerId].join('/')
 

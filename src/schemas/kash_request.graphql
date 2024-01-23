@@ -9,6 +9,7 @@ interface RequestData {
 	mcId: String!
 	partnerId: String
 }
+
 interface KashRequest implements ModelType {
 	id: ID
 	_parentPath: String
@@ -43,6 +44,11 @@ input DashInput {
 	info: String!
 }
 
+input DeleteInput {
+	id: ID!
+	parentPath: String
+}
+
 type KashRequestMutationResponse implements MutationResponse {
 	"Similar to HTTP status code, represents the status of the mutation"
 	code: Int!
@@ -57,4 +63,5 @@ type KashRequestMutationResponse implements MutationResponse {
 type Mutation {
 	createRequest(params: RequestInput!): KashRequestMutationResponse!
 	createDashRequest(params: DashInput!): KashRequestMutationResponse!
+	deleteRequest(params: DeleteInput!): KashRequestMutationResponse
 }

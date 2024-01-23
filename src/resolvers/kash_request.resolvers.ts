@@ -1,9 +1,11 @@
 import {Account, KashRequest, Resolvers} from '../types'
-import {makeResponse, manageError} from '../lib/resolver_tools'
+import {makeResponse, manageError, rejectResponse} from '../lib/resolver_tools'
 import {ModelType, baseLog, kashRequestTemplate} from '../constants'
 import {getFirestore} from 'firebase-admin/firestore'
-import {validateDashRequest, validateRequest} from '../lib/authentication'
+import {getPartnerIdFromToken, validateDashRequest, validateRequest} from '../lib/authentication'
 import Codes, {AppError} from '../lib/error_codes'
+import {deleteRecord, getRecord} from '../lib/model_type.converter'
+import _ from 'lodash'
 
 const dLog = baseLog('resolver.kashRequest')
 
@@ -11,6 +13,12 @@ async function saveRequest(kr: KashRequest): Promise<string> {
   const db = getFirestore()
   const write = await db.collection(ModelType.kashRequest).add(kr)
   return write.id
+}
+
+async function savePaymentLink(id: string, kr: KashRequest) {
+  const db = getFirestore()
+  const data = _.pick(kr.data, ["category", "partnerId"])
+  await db.collection(ModelType.paymentLinks).doc(id).set(data)
 }
 
 async function getAccount(accountId: string): Promise<Account> {
@@ -58,6 +66,8 @@ const resolvers: Resolvers = {
         const {accountId} = apiKey
         const account = await getAccount(accountId)
         const kr = {...kashRequestTemplate, noCancel: true}
+        //TODO report bug with category that being reset by Swing Mobile App
+        kr.data.category = 6 // PaymentLink category
         kr.data.amount = amount
         kr.data.info = info
         kr.data.creditId = account.code
@@ -67,12 +77,24 @@ const resolvers: Resolvers = {
         kr.emitId = apiKey.id
         kr.data.partnerId = apiKey.partnerId
         const id = await saveRequest(kr)
+        await savePaymentLink(id, kr)
         const result = Promise.resolve({id})
         return makeResponse(result, (resp) => ({id: resp.id}))
       } catch (error) {
         return manageError(error)
       }
+    },
+    deleteRequest: async (_, {params}, req) => {
+      const {id, parentPath} = params
+      const partnerId = await getPartnerIdFromToken(req)
+      const kr = await getRecord<KashRequest>(id, ModelType.kashRequest, parentPath ?? undefined)
+      if (kr.data.partnerId !== partnerId) return rejectResponse(new AppError(Codes.NotAllowed))
+      await deleteRecord(id, ModelType.kashRequest, parentPath ?? undefined)
+      await deleteRecord(id, ModelType.paymentLinks, parentPath ?? undefined)
+      const result = Promise.resolve({id})
+      return makeResponse(result, (resp) => ({id: resp.id}), "Record successfully deleted")
     }
+
   }
 }
 

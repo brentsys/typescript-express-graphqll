@@ -59,6 +59,11 @@ export type DashInput = {
   info: Scalars['String']['input'];
 };
 
+export type DeleteInput = {
+  id: Scalars['ID']['input'];
+  parentPath?: InputMaybe<Scalars['String']['input']>;
+};
+
 /** Response after deleting a Model */
 export type DeleteResponse = MutationResponse & {
   __typename?: 'DeleteResponse';
@@ -112,6 +117,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createDashRequest: KashRequestMutationResponse;
   createRequest: KashRequestMutationResponse;
+  deleteRequest?: Maybe<KashRequestMutationResponse>;
 };
 
 
@@ -122,6 +128,11 @@ export type MutationCreateDashRequestArgs = {
 
 export type MutationCreateRequestArgs = {
   params: RequestInput;
+};
+
+
+export type MutationDeleteRequestArgs = {
+  params: DeleteInput;
 };
 
 export type MutationResponse = {
@@ -283,6 +294,7 @@ export type ResolversTypes = {
   CheckoutReference: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['CheckoutReference']>;
   CreateMutationResponse: ResolverTypeWrapper<CreateMutationResponse>;
   DashInput: DashInput;
+  DeleteInput: DeleteInput;
   DeleteResponse: ResolverTypeWrapper<DeleteResponse>;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
@@ -311,6 +323,7 @@ export type ResolversParentTypes = {
   CheckoutReference: ResolversInterfaceTypes<ResolversParentTypes>['CheckoutReference'];
   CreateMutationResponse: CreateMutationResponse;
   DashInput: DashInput;
+  DeleteInput: DeleteInput;
   DeleteResponse: DeleteResponse;
   Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
@@ -407,6 +420,7 @@ export type ModelTypeResolvers<ContextType = any, ParentType extends ResolversPa
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createDashRequest?: Resolver<ResolversTypes['KashRequestMutationResponse'], ParentType, ContextType, RequireFields<MutationCreateDashRequestArgs, 'params'>>;
   createRequest?: Resolver<ResolversTypes['KashRequestMutationResponse'], ParentType, ContextType, RequireFields<MutationCreateRequestArgs, 'params'>>;
+  deleteRequest?: Resolver<Maybe<ResolversTypes['KashRequestMutationResponse']>, ParentType, ContextType, RequireFields<MutationDeleteRequestArgs, 'params'>>;
 };
 
 export type MutationResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['MutationResponse'] = ResolversParentTypes['MutationResponse']> = {

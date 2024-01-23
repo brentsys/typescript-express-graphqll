@@ -43,3 +43,12 @@ export async function getRecord<T extends ModelType>(
   return record as T
 }
 
+export async function deleteRecord(
+  id: string,
+  recordType: string,
+  parentPath?: string
+): Promise<void> {
+  const path = [parentPath, recordType].filter(notEmpty).join("/")
+  await getFirestore().collection(path).doc(id).delete({exists: true})
+}
+

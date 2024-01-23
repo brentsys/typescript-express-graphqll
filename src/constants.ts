@@ -8,7 +8,8 @@ export const ModelType = {
   account: "accounts",
   apiKey: "checkout_api",
   kashRequest: "kash_requests",
-  partner: "partners"
+  partner: "partners",
+  paymentLinks: "pmt_links"
 }
 
 export const AuthorizationTypes = ['Basic']
@@ -22,7 +23,7 @@ export const kashRequestTemplate: KashRequest = {
     creditName: "name",
     currencyCode: "XAF",
     info: "info",
-    mcId: "mcId",
+    mcId: "mcId"
   },
   emitId: "emitId",
   fields: ["accountId", "accountName"],
