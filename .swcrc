@@ -7,7 +7,8 @@
   "jsc": {
     "parser": {
       "syntax": "typescript"
-    }
+    },
+    "loose": false
   },
   "module": {
     "type": "commonjs"
